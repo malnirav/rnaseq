@@ -1,6 +1,10 @@
 process SAMTOOLS_FLAGSTAT {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium'
+
+    memory { 3.GB * task.attempt }
+    errorStrategy 'retry'
+    maxRetries 3
 
     conda (params.enable_conda ? "bioconda::samtools=1.14" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
