@@ -1,7 +1,11 @@
 process PICARD_MARKDUPLICATES {
     tag "$meta.id"
-    label 'process_medium'
-
+    label 'process_high'
+    
+    memory { 10.GB * task.attempt }
+    errorStrategy 'retry'
+    maxRetries 3
+    
     conda (params.enable_conda ? "bioconda::picard=2.26.10" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/picard:2.26.10--hdfd78af_0' :
